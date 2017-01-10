@@ -9,20 +9,12 @@ def log(*args):
 
 class Program:
     def __init__(self):
-        self.data = [0 for i in range(32)]
+        self.data = [0 for i in range(128)]
         self.pc = 0
     def load(self,*args):
         for a in args:
             self.data[self.pc] = a
             self.pc = self.pc + 1
-
-program = Program()
-program.load("NOP")
-# program.load("LOAD A", 30)
-# program.load("LOAD B", 31)
-program.load("JMP", 0)
-program.data[30] = 2
-program.data[31] = 6
 
 class CPU:
     def __init__(self,program):
@@ -96,9 +88,3 @@ class CPU:
     def __str__(self):
         ts = "pc: {} a: {} b: {}".format(self.pc, self.a, self.b)
         return ts
-
-cpu = CPU(program)
-cpu.step()
-cpu.step()
-cpu.step()
-log(cpu)
