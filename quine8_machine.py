@@ -1,4 +1,11 @@
 
+import time
+
+def log(*args):
+    print(time.time(), end=" ")
+    for a in args:
+        print(str(a), end=" ")
+    print()
 
 class Program:
     def __init__(self):
@@ -32,25 +39,26 @@ class CPU:
         self.program = program
     def step(self):
         current_instruction = self.program.data[self.pc]
-        print "current_instruction", current_instruction
+        log("current_instruction", current_instruction)
         if current_instruction == "NOP":
             self.pc = self.pc + 1
         elif current_instruction == "LOAD A":
             # need the operand from the next instruction
             operand = self.program.data[self.pc+1]
-            print "LOAD A", operand
+            log("LOAD A", operand)
             self.a = self.get_memory_value_at(operand)
             self.pc = self.pc + 2
         elif current_instruction == "LOAD B":
             operand = self.program.data[self.pc+1]
-            print "LOAD B", operand
+            log("LOAD B", operand)
             self.b = self.get_memory_value_at(operand)
             self.pc = self.pc + 2
         elif current_instruction == "LOADI A":
+            # TODO: did i do this one right?
             operand = self.program.data[self.pc+1]
             address = self.get_memory_value_at(operand)
             self.a = self.get_memory_value_at(address)
-            print "LOADI A",operand
+            log("LOADI A",operand)
             self.pc = self.pc + 2
         elif current_instruction == "ADD A B":
             tmp1=self.a
@@ -69,13 +77,22 @@ class CPU:
             self.pc = self.pc + 1
         elif current_instruction == "JMP":
             operand = self.program.data[self.pc+1]
-            print "JMP",operand
+            log("JMP",operand)
             self.pc = operand
+        elif current_instruction == "JZ":
+            operand = self.program.data[self.pc+1]
+            log("JZ",operand)
+            self.pc = operand
+        elif current_instruction == "JZI":
+            operand = self.program.data[self.pc+1]
+            address = self.get_memory_value_at(operand)
+            log("JZI",operand,address)
+            self.pc = address
     def get_memory_value_at(self, operand):
         try:
             return self.program.data[operand]
         except IndexError:
-            print "ERROR: invalid memory operand"
+            log("ERROR: invalid memory operand")
     def __str__(self):
         ts = "pc: {} a: {} b: {}".format(self.pc, self.a, self.b)
         return ts
@@ -84,4 +101,4 @@ cpu = CPU(program)
 cpu.step()
 cpu.step()
 cpu.step()
-print cpu
+log(cpu)
