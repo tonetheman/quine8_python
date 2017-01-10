@@ -14,3 +14,7 @@ def test_loadia():
     log(cpu)
 
     assert(cpu.a == 10 and cpu.b == 0 and cpu.Z_flag == False)
+
+
+test_loadia()
+
